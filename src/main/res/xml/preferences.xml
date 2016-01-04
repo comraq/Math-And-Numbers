@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <Preference
+    android:key="settings_pref_screen_key"
+    android:title="Whole Numbers Arithmetic Operations"
+    android:summary="Something"/>
+  <PreferenceCategory
+    android:title="@string/settings_pref_frag_category_addition">
+    <CheckBoxPreference
+      android:key="checkbox_preference"
+      android:title="@string/settings_pref_frag_carry"/>
+  </PreferenceCategory>
+  <PreferenceCategory
+    android:title="Subtraction">
+    <CheckBoxPreference
+      android:key="checkbox_preference2"
+      android:title="@string/settings_pref_frag_carry"/>
+  </PreferenceCategory>
+
+
+  <adam.mathandnumbers.CustomDialogPreference
+    android:key="testkey"
+    android:title="Test Dialog"
+    android:summary="Testing dialog preference"
+    android:dialogMessage="This is a test dialog from the preference screen"
+    android:positiveButtonText="@string/dialog_button_cancel"
+    android:negativeButtonText="@string/dialog_button_yes"/>
+
+</PreferenceScreen>
