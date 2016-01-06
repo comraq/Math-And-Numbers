@@ -11,6 +11,6 @@ public class CustomDialogPreference extends DialogPreference {
   public CustomDialogPreference(Context context, AttributeSet attrs) {
     super(context, attrs);
 
-    //setDialogLayoutResource(R.layout.dialog_pref);
+    //setDialogLayoutResource(R.xml.diag_pref);
   }
 }

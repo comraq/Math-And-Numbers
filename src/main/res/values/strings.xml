@@ -17,4 +17,7 @@
   <string name="settings_pref_frag_carry">Include Carry</string>
   <string name="settings_pref_frag_category_addition">Addition</string>
   <string name="settings_pref_frag_title">Settings</string>
+  <string name="sw_pref_add">sw_pref_add</string>
+  <string name="sw_pref_add_title">Include Addition</string>
+  <string name="check_pref_add_carry">check_pref_add_carry</string>
 </resources>

@@ -2,12 +2,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
   <Preference
     android:key="settings_pref_screen_key"
-    android:title="Whole Numbers Arithmetic Operations"
+    android:title="Whole Number Arithmetic Operations"
     android:summary="Something"/>
   <PreferenceCategory
     android:title="@string/settings_pref_frag_category_addition">
+    <SwitchPreference
+      android:key="@string/sw_pref_add"
+      android:title="@string/sw_pref_add_title"/>
     <CheckBoxPreference
-      android:key="checkbox_preference"
+      android:key="@string/check_pref_add_carry"
       android:title="@string/settings_pref_frag_carry"/>
   </PreferenceCategory>
   <PreferenceCategory
