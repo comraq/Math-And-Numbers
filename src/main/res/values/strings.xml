@@ -30,4 +30,5 @@
   <string name="check_pref_div_remainder">check_pref_div_remainder</string>
   <string name="check_pref_multi_carry">check_pref_multi_carry</string>
   <string name="check_pref_remainder">Remainder</string>
+  <string name="settings_pref_frag_screen_whole_number_title">Whole Number Arithmetic Operations</string>
 </resources>

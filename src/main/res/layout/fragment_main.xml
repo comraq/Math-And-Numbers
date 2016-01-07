@@ -34,4 +34,5 @@
     android:text="@string/main_frag_button_exit"
     android:id="@+id/main_act_button_exit"
     android:layout_gravity="center"/>
+
 </LinearLayout>

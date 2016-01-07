@@ -27,7 +27,12 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Pr
     super.onCreate(savedInstanceState);
 
     getActivity().setTitle(R.string.settings_pref_frag_title);
-    mainScreen = getPreferenceManager().createPreferenceScreen(getActivity());
+    getActivity().setTheme(R.style.AppTheme);
+
+    // Load the preferences from an XML resource
+    addPreferencesFromResource(R.xml.preferences);
+
+    /*mainScreen = getPreferenceManager().createPreferenceScreen(getActivity());
     setPreferenceScreen(mainScreen);
 
     additionCategory = addCategory(R.string.settings_pref_frag_category_addition);
@@ -40,18 +45,18 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Pr
     initCategory(multiplicationCategory, R.string.sw_pref_mul);
     initCategory(divisionCategory, R.string.sw_pref_div);
 
-    initCheckPrefs();
+    initCheckPrefs();*/
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View v = super.onCreateView(inflater, container, savedInstanceState);
     //SwitchPreference addSw, subSw, mulSw, divSw;
-    onPreferenceChange(additionCategory.findPreference(getString(R.string.sw_pref_add)), null);
+    /*onPreferenceChange(additionCategory.findPreference(getString(R.string.sw_pref_add)), null);
     onPreferenceChange(subtractionCategory.findPreference(getString(R.string.sw_pref_sub)), null);
     onPreferenceChange(multiplicationCategory.findPreference(getString(R.string.sw_pref_mul)), null);
     onPreferenceChange(divisionCategory.findPreference(getString(R.string.sw_pref_div)), null);
-
+*/
     return v;
   }
 
