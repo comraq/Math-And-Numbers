@@ -14,10 +14,20 @@
   <string name="main_frag_button_settings">Settings</string>
   <string name="main_frag_button_start">Start</string>
 
-  <string name="settings_pref_frag_carry">Include Carry</string>
+  <string name="check_pref_carry">Carry</string>
   <string name="settings_pref_frag_category_addition">Addition</string>
   <string name="settings_pref_frag_title">Settings</string>
   <string name="sw_pref_add">sw_pref_add</string>
-  <string name="sw_pref_add_title">Include Addition</string>
   <string name="check_pref_add_carry">check_pref_add_carry</string>
+  <string name="settings_pref_frag_category_subtraction">Subtraction</string>
+  <string name="settings_pref_frag_category_multiplication">Multiplication</string>
+  <string name="settings_pref_frag_category_division">Division</string>
+  <string name="sw_pref_title">Include</string>
+  <string name="sw_pref_sub">sw_pref_sub</string>
+  <string name="sw_pref_mul">sw_pref_mul</string>
+  <string name="sw_pref_div">sw_pref_div</string>
+  <string name="check_pref_sub_carry">check_pref_sub_carry</string>
+  <string name="check_pref_div_remainder">check_pref_div_remainder</string>
+  <string name="check_pref_multi_carry">check_pref_multi_carry</string>
+  <string name="check_pref_remainder">Remainder</string>
 </resources>

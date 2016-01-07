@@ -8,16 +8,16 @@
     android:title="@string/settings_pref_frag_category_addition">
     <SwitchPreference
       android:key="@string/sw_pref_add"
-      android:title="@string/sw_pref_add_title"/>
+      android:title="Include"/>
     <CheckBoxPreference
       android:key="@string/check_pref_add_carry"
-      android:title="@string/settings_pref_frag_carry"/>
+      android:title="@string/check_pref_carry"/>
   </PreferenceCategory>
   <PreferenceCategory
     android:title="Subtraction">
     <CheckBoxPreference
       android:key="checkbox_preference2"
-      android:title="@string/settings_pref_frag_carry"/>
+      android:title="@string/check_pref_carry"/>
   </PreferenceCategory>
 
 
