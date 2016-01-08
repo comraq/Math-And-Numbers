@@ -1,5 +1,6 @@
 package adam.mathandnumbers;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,16 +13,23 @@ import android.view.ViewGroup;
  */
 public class MainFragment extends Fragment implements View.OnClickListener {
 
+  public interface MainCommunicator {
+    void settingsButtonClicked();
+    void exitButtonClick();
+  }
+
+  MainCommunicator comm;
+
   @Override
   public void onClick(View v) {
     switch(v.getId()) {
       case R.id.main_act_button_start:
         break;
       case R.id.main_act_button_settings:
-        ((MainActivity) getActivity()).showSettingsPreferenceFragment();
+        comm.settingsButtonClicked();
         break;
       case R.id.main_act_button_exit:
-        ((MainActivity) getActivity()).promptQuit();
+        comm.exitButtonClick();
         break;
       default:
         //Nothing
@@ -41,5 +49,15 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     v.findViewById(R.id.main_act_button_start).setOnClickListener(this);
     v.findViewById(R.id.main_act_button_settings).setOnClickListener(this);
     v.findViewById(R.id.main_act_button_exit).setOnClickListener(this);
+  }
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    try {
+      comm = (MainCommunicator) activity;
+    } catch (ClassCastException e) {
+      throw new ClassCastException(comm.toString() + " must implement MainCommunicator");
+    }
   }
 }

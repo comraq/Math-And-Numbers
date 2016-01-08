@@ -1,12 +1,11 @@
 package adam.mathandnumbers;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
-import android.preference.SwitchPreference;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,122 +13,72 @@ import android.view.ViewGroup;
 /**
  * Created by adam on 2016-01-03.
  */
-public class SettingsPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
+public class SettingsPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
   private PreferenceScreen mainScreen;
+  private PreferenceCategory wholeNumbersCategory;
 
-  private PreferenceCategory additionCategory, subtractionCategory, multiplicationCategory, divisionCategory;
+  SettingsCommunicator comm;
 
-  private Preference addCarryCheck, subCarryCheck, mulCarryCheck, divRemainderCheck;
+  public interface SettingsCommunicator {
+    void addSubClicked();
+    void mulDivClicked();
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     getActivity().setTitle(R.string.settings_pref_frag_title);
-    getActivity().setTheme(R.style.AppTheme);
 
-    // Load the preferences from an XML resource
-    addPreferencesFromResource(R.xml.preferences);
-
-    /*mainScreen = getPreferenceManager().createPreferenceScreen(getActivity());
+    mainScreen = getPreferenceManager().createPreferenceScreen(getActivity());
     setPreferenceScreen(mainScreen);
 
-    additionCategory = addCategory(R.string.settings_pref_frag_category_addition);
-    subtractionCategory = addCategory(R.string.settings_pref_frag_category_subtraction);
-    multiplicationCategory = addCategory(R.string.settings_pref_frag_category_multiplication);
-    divisionCategory = addCategory(R.string.settings_pref_frag_category_division);
+    wholeNumbersCategory = PreferenceFragmentUtilities.addCategory(getActivity(), mainScreen, R.string.settings_pref_frag_screen_whole_number_title);
 
-    initCategory(additionCategory, R.string.sw_pref_add);
-    initCategory(subtractionCategory, R.string.sw_pref_sub);
-    initCategory(multiplicationCategory, R.string.sw_pref_mul);
-    initCategory(divisionCategory, R.string.sw_pref_div);
+    Preference addSubPref = new Preference(getActivity());
+    addSubPref.setKey(getString(R.string.add_sub_pref_key));
+    addSubPref.setTitle(R.string.add_sub_pref_title);
+    addSubPref.setSummary(R.string.add_sub_pref_summary);
+    addSubPref.setOnPreferenceClickListener(this);
+    wholeNumbersCategory.addPreference(addSubPref);
 
-    initCheckPrefs();*/
+    Preference mulDivPref = new Preference(getActivity());
+    mulDivPref.setKey(getString(R.string.mul_div_pref_key));
+    mulDivPref.setTitle(R.string.mul_div_pref_title);
+    mulDivPref.setSummary(R.string.mul_div_pref_summary);
+    mulDivPref.setOnPreferenceClickListener(this);
+    wholeNumbersCategory.addPreference(mulDivPref);
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View v = super.onCreateView(inflater, container, savedInstanceState);
-    //SwitchPreference addSw, subSw, mulSw, divSw;
-    /*onPreferenceChange(additionCategory.findPreference(getString(R.string.sw_pref_add)), null);
-    onPreferenceChange(subtractionCategory.findPreference(getString(R.string.sw_pref_sub)), null);
-    onPreferenceChange(multiplicationCategory.findPreference(getString(R.string.sw_pref_mul)), null);
-    onPreferenceChange(divisionCategory.findPreference(getString(R.string.sw_pref_div)), null);
-*/
     return v;
   }
 
   @Override
-  public boolean onPreferenceChange(Preference preference, Object newValue) {
-    int keyResID = getResources().getIdentifier(preference.getKey(), "string", getActivity().getPackageName());
-
-    switch (keyResID) {
-      case R.string.sw_pref_add:
-        if (!((SwitchPreference) preference).isChecked()) {
-          additionCategory.addPreference(addCarryCheck);
-        } else {
-          additionCategory.removePreference(addCarryCheck);
-        }
+  public boolean onPreferenceClick(Preference preference) {
+    switch (preference.getTitleRes()) {
+      case R.string.add_sub_pref_title:
+        comm.addSubClicked();
         break;
-      case R.string.sw_pref_sub:
-        if (!((SwitchPreference) preference).isChecked()) {
-          subtractionCategory.addPreference(subCarryCheck);
-        } else {
-          subtractionCategory.removePreference(subCarryCheck);
-        }
-        break;
-      case R.string.sw_pref_mul:
-        if (!((SwitchPreference) preference).isChecked()) {
-          multiplicationCategory.addPreference(mulCarryCheck);
-        } else {
-          multiplicationCategory.removePreference(mulCarryCheck);
-        }
-        break;
-      case R.string.sw_pref_div:
-        if (!((SwitchPreference) preference).isChecked()) {
-          divisionCategory.addPreference(divRemainderCheck);
-        } else {
-          divisionCategory.removePreference(divRemainderCheck);
-        }
+      case R.string.mul_div_pref_title:
+        comm.mulDivClicked();
         break;
       default:
-        //Nothing
+        return false;
     }
     return true;
   }
 
-  private PreferenceCategory addCategory(int titleId) {
-    PreferenceCategory category = new PreferenceCategory(getActivity());
-    category.setTitle(titleId);
-    mainScreen.addPreference(category);
-
-    return category;
-  }
-
-  private void initCategory(PreferenceCategory category, int keyId) {
-    SwitchPreference sw = new SwitchPreference(getActivity());
-    sw.setKey(getString(keyId));
-    sw.setTitle(R.string.sw_pref_title);
-    sw.setOnPreferenceChangeListener(this);
-    category.addPreference(sw);
-  }
-
-  private void initCheckPrefs() {
-    addCarryCheck = new CheckBoxPreference(getActivity());
-    addCarryCheck.setKey(getString(R.string.check_pref_add_carry));
-    addCarryCheck.setTitle(R.string.check_pref_carry);
-
-    subCarryCheck = new CheckBoxPreference(getActivity());
-    subCarryCheck.setKey(getString(R.string.check_pref_sub_carry));
-    subCarryCheck.setTitle(R.string.check_pref_carry);
-
-    mulCarryCheck = new CheckBoxPreference(getActivity());
-    mulCarryCheck.setKey(getString(R.string.check_pref_multi_carry));
-    mulCarryCheck.setTitle(R.string.check_pref_carry);
-
-    divRemainderCheck = new CheckBoxPreference(getActivity());
-    divRemainderCheck.setKey(getString(R.string.check_pref_div_remainder));
-    divRemainderCheck.setTitle(R.string.check_pref_remainder);
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    try {
+      comm = (SettingsCommunicator) activity;
+    } catch (ClassCastException e) {
+      throw new ClassCastException(comm.toString() + " must implement SettingsCommunicator");
+    }
   }
 }

@@ -1,58 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
   <PreferenceCategory
-    android:title="@string/settings_pref_frag_screen_whole_number_title">
-    <PreferenceScreen
-      android:summary="Settings for Addition and Subtraction"
-      android:title="Addition/Subtraction">
-      <PreferenceCategory
-        android:title="@string/settings_pref_frag_category_addition">
-        <SwitchPreference
-          android:key="@string/sw_pref_add"
-          android:title="@string/sw_pref_title"/>
-        <CheckBoxPreference
-          android:dependency="@string/sw_pref_add"
-          android:key="@string/check_pref_add_carry"
-          android:title="@string/check_pref_carry"/>
-      </PreferenceCategory>
-      <PreferenceCategory
-        android:title="@string/settings_pref_frag_category_subtraction">
-        <SwitchPreference
-          android:key="@string/sw_pref_sub"
-          android:title="@string/sw_pref_title"/>
-        <CheckBoxPreference
-          android:dependency="@string/sw_pref_sub"
-          android:key="@string/check_pref_sub_carry"
-          android:title="@string/check_pref_carry"/>
-      </PreferenceCategory>
-    </PreferenceScreen>
-    <PreferenceScreen
-      android:summary="Settings for Multiplication and Division"
-      android:title="Multiplication/Division">
-      <PreferenceCategory
-        android:title="@string/settings_pref_frag_category_multiplication">
-        <SwitchPreference
-          android:key="@string/sw_pref_mul"
-          android:title="@string/sw_pref_title"/>
-        <CheckBoxPreference
-          android:dependency="@string/sw_pref_mul"
-          android:key="@string/check_pref_multi_carry"
-          android:title="@string/check_pref_carry"/>
-      </PreferenceCategory>
-      <PreferenceCategory
-        android:title="@string/settings_pref_frag_category_division">
-        <SwitchPreference
-          android:key="@string/sw_pref_div"
-          android:title="@string/sw_pref_title"/>
-        <CheckBoxPreference
-          android:dependency="@string/sw_pref_div"
-          android:key="@string/check_pref_div_remainder"
-          android:title="@string/check_pref_remainder"/>
-      </PreferenceCategory>
-    </PreferenceScreen>
-  </PreferenceCategory>
-
-  <PreferenceCategory
     android:title="Testing">
     <adam.mathandnumbers.CustomDialogPreference
       android:dialogMessage="This is a test dialog from the preference screen"

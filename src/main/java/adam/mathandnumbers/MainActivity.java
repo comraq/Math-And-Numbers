@@ -1,22 +1,16 @@
 package adam.mathandnumbers;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity implements CustomDialogFragment.CustomDialogListener {
+public class MainActivity extends AppCompatActivity implements MainFragment.MainCommunicator, SettingsPreferenceFragment.SettingsCommunicator, CustomDialogFragment.CustomDialogListener {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +54,16 @@ public class MainActivity extends AppCompatActivity implements CustomDialogFragm
     return super.onOptionsItemSelected(item);
   }
 
-  public void showSettingsPreferenceFragment() {
-    FragmentTransaction ft = getFragmentManager().beginTransaction();
-    ft.replace(R.id.main_act_layout_container, new SettingsPreferenceFragment());
-    ft.addToBackStack(null);
-    ft.commit();
+  private void showSettingsPreferenceFragment() {
+    if (!(getFragmentManager().findFragmentById(R.id.main_act_layout_container) instanceof PreferenceFragment)) {
+      FragmentTransaction ft = getFragmentManager().beginTransaction();
+      ft.replace(R.id.main_act_layout_container, new SettingsPreferenceFragment());
+      ft.addToBackStack(null);
+      ft.commit();
+    }
   }
 
-  public void promptQuit() {
+  private void promptQuit() {
     CustomDialogFragment dialogFrag = CustomDialogFragment.newInstance(this, R.string.dialog_quit_title, R.string.dialog_quit_message, R.string.dialog_button_yes, R.string.dialog_button_cancel);
     dialogFrag.show(getFragmentManager(), "Quit Dialog");
   }
@@ -85,5 +81,31 @@ public class MainActivity extends AppCompatActivity implements CustomDialogFragm
     } else {
       promptQuit();
     }
+  }
+
+  @Override
+  public void settingsButtonClicked() {
+    showSettingsPreferenceFragment();
+  }
+
+  @Override
+  public void exitButtonClick() {
+    promptQuit();
+  }
+
+  @Override
+  public void addSubClicked() {
+    FragmentTransaction ft = getFragmentManager().beginTransaction();
+    ft.replace(R.id.main_act_layout_container, new AddSubPreferenceFragment());
+    ft.addToBackStack(null);
+    ft.commit();
+  }
+
+  @Override
+  public void mulDivClicked() {
+    FragmentTransaction ft = getFragmentManager().beginTransaction();
+    ft.replace(R.id.main_act_layout_container, new MulDivPreferenceFragment());
+    ft.addToBackStack(null);
+    ft.commit();
   }
 }
