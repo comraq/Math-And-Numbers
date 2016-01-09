@@ -2,6 +2,7 @@ package adam.mathandnumbers;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.MainCommunicator, SettingsPreferenceFragment.SettingsCommunicator, CustomDialogFragment.CustomDialogListener {
+
+  public static final String QUESTION_PREF = "adam.mathandnumbers.question_pref";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
   }
 
   private void showQuestionActivity() {
+    saveSharedPreferences();
     Intent i = new Intent(this, QuestionActivity.class);
     startActivity(i);
   }
@@ -72,6 +76,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
   private void promptQuit() {
     CustomDialogFragment dialogFrag = CustomDialogFragment.newInstance(this, R.string.dialog_quit_title, R.string.dialog_quit_message, R.string.dialog_button_yes, R.string.dialog_button_cancel);
     dialogFrag.show(getFragmentManager(), "Quit Dialog");
+  }
+
+  private void saveSharedPreferences() {
+    SharedPreferences pref = getSharedPreferences(QUESTION_PREF, MODE_PRIVATE);
+    SharedPreferences.Editor editor = pref.edit();
+    editor.putBoolean(getString(R.string.sw_pref_add_key), true);
+    editor.commit();
   }
 
   @Override
