@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
     //noinspection SimplifiableIfStatement
     switch (id) {
       case R.id.action_start:
+        showQuestionActivity();
         break;
       case R.id.action_settings:
         showSettingsPreferenceFragment();
@@ -52,6 +53,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
         //Nothing
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  private void showQuestionActivity() {
+    Intent i = new Intent(this, QuestionActivity.class);
+    startActivity(i);
   }
 
   private void showSettingsPreferenceFragment() {
@@ -84,14 +90,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
   }
 
   @Override
-  public void settingsButtonClicked() {
-    showSettingsPreferenceFragment();
-  }
+  public void startButtonClicked() { showQuestionActivity(); }
 
   @Override
-  public void exitButtonClick() {
-    promptQuit();
-  }
+  public void settingsButtonClicked() { showSettingsPreferenceFragment();  }
+
+  @Override
+  public void exitButtonClick(){ promptQuit(); }
 
   @Override
   public void addSubClicked() {

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 public class MainFragment extends Fragment implements View.OnClickListener {
 
   public interface MainCommunicator {
+    void startButtonClicked();
     void settingsButtonClicked();
     void exitButtonClick();
   }
@@ -24,6 +25,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
   public void onClick(View v) {
     switch(v.getId()) {
       case R.id.main_act_button_start:
+        comm.startButtonClicked();
         break;
       case R.id.main_act_button_settings:
         comm.settingsButtonClicked();
