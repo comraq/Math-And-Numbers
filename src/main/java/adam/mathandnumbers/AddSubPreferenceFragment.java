@@ -1,5 +1,7 @@
 package adam.mathandnumbers;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -10,6 +12,9 @@ import android.preference.SwitchPreference;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import adam.mathandnumbers.QuestionBank.QuestionType;
+import adam.mathandnumbers.QuestionBank.QuestionOptions;
 
 /**
  * Created by adam on 2016-01-07.
@@ -34,39 +39,50 @@ public class AddSubPreferenceFragment extends PreferenceFragment implements Pref
     super.onCreate(savedInstanceState);
 
     getActivity().setTitle(R.string.add_sub_pref_frag_title);
-
     mainScreen = getPreferenceManager().createPreferenceScreen(getActivity());
     setPreferenceScreen(mainScreen);
+    initPreferences();
+  }
 
+  private void initPreferences() {
     additionCategory = PreferenceFragmentUtilities.addCategory(getActivity(), mainScreen, R.string.settings_pref_frag_category_addition);
     subtractionCategory = PreferenceFragmentUtilities.addCategory(getActivity(), mainScreen, R.string.settings_pref_frag_category_subtraction);
 
-    addSw = PreferenceFragmentUtilities.initCategory(getActivity(), this, additionCategory, R.string.sw_pref_add_key);
-    subSw = PreferenceFragmentUtilities.initCategory(getActivity(), this, subtractionCategory, R.string.sw_pref_sub_key);
+    addSw = PreferenceFragmentUtilities.initCategory(getActivity(), this, additionCategory, QuestionType.ADDITION.toString());
+    subSw = PreferenceFragmentUtilities.initCategory(getActivity(), this, subtractionCategory, QuestionType.SUBTRACTION.toString());
 
     addCarryCheck = PreferenceFragmentUtilities.initCheckPref(getActivity(), R.string.check_pref_add_carry_key);
     subCarryCheck = PreferenceFragmentUtilities.initCheckPref(getActivity(), R.string.check_pref_sub_carry_key);
+
+    setDefaultValues();
+  }
+
+  private void setDefaultValues() {
+    SharedPreferences pref = getActivity().getSharedPreferences(MainActivity.DEFAULT_PREFERENCES, Context.MODE_PRIVATE);
+
+    if (!pref.contains(QuestionType.ADDITION.toString())) addSw.setChecked(true);
+    if (!pref.contains(QuestionType.SUBTRACTION.toString())) subSw.setChecked(true);
+    if (!pref.contains(getActivity().getString(R.string.check_pref_add_carry_key))) addCarryCheck.setChecked(false);
+    if (!pref.contains(getActivity().getString(R.string.check_pref_sub_carry_key))) subCarryCheck.setChecked(false);
   }
 
   @Override
   public boolean onPreferenceChange(Preference preference, Object newValue) {
-    int keyResID = getResources().getIdentifier(preference.getKey(), "string", getActivity().getPackageName());
+    String key = preference.getKey();
     boolean checked = (boolean) newValue;
     PreferenceCategory category;
     CheckBoxPreference checkPref;
 
-    switch (keyResID) {
-      case R.string.sw_pref_add_key:
-        category = additionCategory;
-        checkPref = addCarryCheck;
-        break;
-      case R.string.sw_pref_sub_key:
-        category = subtractionCategory;
-        checkPref = subCarryCheck;
-        break;
-      default:
-        return false;
+    if (key == QuestionType.ADDITION.toString()) {
+      category = additionCategory;
+      checkPref = addCarryCheck;
+    } else if (key == QuestionType.SUBTRACTION.toString()) {
+      category = subtractionCategory;
+      checkPref = subCarryCheck;
+    } else {
+      return false;
     }
+
     if (checked) {
       category.addPreference(checkPref);
     } else {

@@ -19,10 +19,11 @@ public class PreferenceFragmentUtilities {
     return category;
   }
 
-  public static SwitchPreference initCategory(Context context, Preference.OnPreferenceChangeListener listener, PreferenceCategory category, int keyId) {
+  public static SwitchPreference initCategory(Context context, Preference.OnPreferenceChangeListener listener, PreferenceCategory category, String key) {
     SwitchPreference sw = new SwitchPreference(context);
-    sw.setKey(context.getString(keyId));
+    sw.setKey(key);
     sw.setTitle(R.string.sw_pref_title);
+    sw.setPersistent(true);
     sw.setOnPreferenceChangeListener(listener);
     category.addPreference(sw);
     return sw;
@@ -36,6 +37,7 @@ public class PreferenceFragmentUtilities {
     } else {
       checkPref.setTitle(R.string.check_pref_carry_title);
     }
+    checkPref.setPersistent(true);
     return checkPref;
   }
 }
