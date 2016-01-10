@@ -42,7 +42,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View v = inflater.inflate(R.layout.fragment_question, container, false);
-    questionTextView = (TextView) v.findViewById(R.id.ques_frag_text_view_curr_question);
+    questionTextView = (TextView) v.findViewById(R.id.ques_frag_answer);
     nextButton = (Button) v.findViewById(R.id.ques_frag_button_next_question);
     nextButton.setOnClickListener(this);
     return v;
