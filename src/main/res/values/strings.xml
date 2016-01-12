@@ -43,4 +43,7 @@
   <string name="check_pref_multi_carry_key">check_pref_multi_carry_key</string>
   <string name="check_pref_div_remainder_key">check_pref_div_remainder_key</string>
   <string name="question_type_key_carry">carry</string>
+  <string name="ques_frag_operand_one">Operand1</string>
+  <string name="ques_frag_operand_two">Operand2</string>
+  <string name="ques_frag_answer_hint">Your Answer Here</string>
 </resources>

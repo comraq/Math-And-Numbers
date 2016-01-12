@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:focusable="true"
+  android:focusableInTouchMode="true">
+
+  <TextView
+    android:id="@+id/ques_frag_operand_one"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignRight="@+id/ques_frag_long_equation_line"
+    android:layout_above="@+id/ques_frag_operand_two"
+
+    android:text="@string/ques_frag_operand_one"
+    android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+  <TextView
+    android:id="@+id/ques_frag_operand_two"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignRight="@+id/ques_frag_long_equation_line"
+    android:layout_above="@+id/ques_frag_long_equation_line"
+
+    android:text="@string/ques_frag_operand_two"
+    android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+  <View
+    android:id="@+id/ques_frag_long_equation_line"
+    android:layout_width="170dp"
+    android:layout_height="5dp"
+    android:layout_alignParentStart="false"
+    android:layout_alignParentTop="false"
+    android:layout_alignWithParentIfMissing="false"
+    android:layout_centerInParent="true"
+
+    android:background="@drawable/horizontal_line"/>
+
+  <TextView
+    android:id="@+id/ques_frag_operator"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/ques_frag_long_equation_line"
+    android:layout_alignLeft="@+id/ques_frag_long_equation_line"
+
+    android:text="Operator"
+    android:gravity="left"
+    android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+  <EditText
+    android:id="@+id/ques_frag_answer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignRight="@+id/ques_frag_long_equation_line"
+    android:layout_below="@+id/ques_frag_long_equation_line"
+
+    android:background="@null"
+    android:gravity="right"
+    android:hint="@string/ques_frag_answer_hint"
+    android:inputType="number"/>
+</RelativeLayout>

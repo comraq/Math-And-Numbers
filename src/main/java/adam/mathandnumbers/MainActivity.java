@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -24,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
     DEFAULT_PREFERENCES = getPackageName() + "_preferences";
 
     FragmentTransaction ft = getFragmentManager().beginTransaction();
-    ft.replace(R.id.main_act_layout_container, new MainFragment());
+    ft.replace(R.id.main_act_fragment_container, new MainFragment());
     ft.commit();
   }
 
@@ -65,9 +64,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
   }
 
   private void showSettingsPreferenceFragment() {
-    if (!(getFragmentManager().findFragmentById(R.id.main_act_layout_container) instanceof PreferenceFragment)) {
+    if (!(getFragmentManager().findFragmentById(R.id.main_act_fragment_container) instanceof PreferenceFragment)) {
       FragmentTransaction ft = getFragmentManager().beginTransaction();
-      ft.replace(R.id.main_act_layout_container, new SettingsPreferenceFragment());
+      ft.replace(R.id.main_act_fragment_container, new SettingsPreferenceFragment());
       ft.addToBackStack(null);
       ft.commit();
     }
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
   @Override
   public void addSubClicked() {
     FragmentTransaction ft = getFragmentManager().beginTransaction();
-    ft.replace(R.id.main_act_layout_container, new AddSubPreferenceFragment());
+    ft.replace(R.id.main_act_fragment_container, new AddSubPreferenceFragment());
     ft.addToBackStack(null);
     ft.commit();
   }
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
   @Override
   public void mulDivClicked() {
     FragmentTransaction ft = getFragmentManager().beginTransaction();
-    ft.replace(R.id.main_act_layout_container, new MulDivPreferenceFragment());
+    ft.replace(R.id.main_act_fragment_container, new MulDivPreferenceFragment());
     ft.addToBackStack(null);
     ft.commit();
   }

@@ -51,27 +51,10 @@ public class QuestionBank {
     }
   }
 
-  /*public void include(QuestionType type) { questions.put(type, new Question(type)); }
-
-  public boolean check(QuestionType type, QuestionOptions option) {
-    if (questions.get(type) == null || !questions.get(type).checkOptions(option)) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  public void set(QuestionType type, QuestionOptions option) { questions.get(type).includeOption(option); }
-
-  public int numQuestionTypes() { return questions.size(); }*/
-
   public Question getNextQuestion() {
     Question[] qArray = questions.values().toArray(new Question[0]);
-    //int nextQuestionIndex = ThreadLocalRandom.current().nextInt(0, questions.size());
-    //return questions.get(QUESTION_TYPES[nextQuestionIndex]);
     int randIndex = ThreadLocalRandom.current().nextInt(0, qArray.length);
-    return qArray[randIndex];
-
+    return qArray[randIndex].genNextQuestion();
   }
 
   private void setQuestionOptions(Question q, Context context, SharedPreferences pref) {

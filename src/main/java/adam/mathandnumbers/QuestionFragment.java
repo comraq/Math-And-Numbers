@@ -7,8 +7,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import adam.mathandnumbers.QuestionBank.QuestionType;
 import adam.mathandnumbers.QuestionBank.QuestionOptions;
@@ -16,55 +18,80 @@ import adam.mathandnumbers.QuestionBank.QuestionOptions;
 /**
  * Created by adam on 2016-01-09.
  */
-public class QuestionFragment extends Fragment implements View.OnClickListener {
+public class QuestionFragment extends Fragment {
 
   private Question question;
-  private QuestionCommunicator comm;
-  private TextView questionTextView;
-  private Button nextButton;
+  private QuestionFragCommunicator comm;
+  private EditText answerEditText;
 
-  @Override
-  public void onClick(View v) {
-    switch(v.getId()) {
-      case R.id.ques_frag_button_next_question:
-        showNextQuestion();
-        break;
-      default:
-        //Do nothing
-    }
-  }
-
-  public interface QuestionCommunicator {
+  public interface QuestionFragCommunicator {
     Question getNextQuestion();
   }
 
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    View v = inflater.inflate(R.layout.fragment_question, container, false);
-    questionTextView = (TextView) v.findViewById(R.id.ques_frag_answer);
-    nextButton = (Button) v.findViewById(R.id.ques_frag_button_next_question);
-    nextButton.setOnClickListener(this);
+    View v = inflater.inflate(R.layout.fragment_question_long, container, false);
+    //View v = inflater.inflate(R.layout.fragment_question_expression, container, false);
+    answerEditText = (EditText) v.findViewById(R.id.ques_frag_answer);
     return v;
   }
 
-  private void showNextQuestion() {
+  public void showNextQuestion() {
     question = comm.getNextQuestion();
     getActivity().setTitle(question.getType().title());
-    if (question.getType() == QuestionType.DIVISION) {
-      questionTextView.setText("" + question.checkOptions(QuestionOptions.REMAINDER));
-    } else {
-      questionTextView.setText("" + question.checkOptions(QuestionOptions.CARRY));
+
+    //TODO: Need to update number of operand textviews as according to numOperands in the question
+    showOperands();
+    TextView operandOne = (TextView) getView().findViewById(R.id.ques_frag_operand_one);
+    TextView operandTwo = (TextView) getView().findViewById(R.id.ques_frag_operand_two);
+    operandOne.setText("" + question.getOperands().get(0));
+    operandTwo.setText("" + question.getOperands().get(1));
+
+    updateOperator();
+  }
+
+  private void showOperands() {
+    int numOperands = question.getNumOperands();
+    TextView currOperand;
+    for (int i = 0; i < numOperands; ++i) {
+      //currOperand = new TextView(getActivity());
     }
+  }
+
+  private void updateOperator() {
+    TextView operator = (TextView) getActivity().findViewById(R.id.ques_frag_operator);
+    switch (question.getType()) {
+      case ADDITION:
+        operator.setText("\u002B"); //Unicode for Addition Symbol
+        break;
+      case SUBTRACTION:
+        operator.setText("\u2212"); //Unicode for Subtraction Symbol
+        break;
+      case MULTIPLICATION:
+        operator.setText("\u00D7"); //Unicode for Multiplication Symbol
+        break;
+      case DIVISION:
+        operator.setText("\u00F7"); //Unicode for Division Symbol
+        break;
+      default:
+        //Do nothing
+    }
+  }
+
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    showNextQuestion();
   }
 
   @Override
   public void onAttach(Activity activity) {
     super.onAttach(activity);
     try {
-      comm = (QuestionCommunicator) activity;
+      comm = (QuestionFragCommunicator) activity;
     } catch (ClassCastException e) {
-      throw new ClassCastException(comm.toString() + " must implement QuestionCommunicator");
+      throw new ClassCastException(comm.toString() + " must implement QuestionFragCommunicator");
     }
   }
 }
