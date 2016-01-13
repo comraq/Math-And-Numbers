@@ -2,15 +2,18 @@ package adam.mathandnumbers;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputType;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import adam.mathandnumbers.QuestionBank.QuestionType;
 import adam.mathandnumbers.QuestionBank.QuestionOptions;
@@ -22,7 +25,7 @@ public class QuestionFragment extends Fragment {
 
   private Question question;
   private QuestionFragCommunicator comm;
-  private EditText answerEditText;
+  private RelativeLayout layoutContainer;
 
   public interface QuestionFragCommunicator {
     Question getNextQuestion();
@@ -32,31 +35,41 @@ public class QuestionFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View v = inflater.inflate(R.layout.fragment_question_long, container, false);
-    //View v = inflater.inflate(R.layout.fragment_question_expression, container, false);
-    answerEditText = (EditText) v.findViewById(R.id.ques_frag_answer);
+    layoutContainer = (RelativeLayout) v.findViewById(R.id.ques_frag_long_layout_container);
     return v;
   }
 
   public void showNextQuestion() {
+    removePreviousViews();
     question = comm.getNextQuestion();
     getActivity().setTitle(question.getType().title());
 
-    //TODO: Need to update number of operand textviews as according to numOperands in the question
-    showOperands();
-    TextView operandOne = (TextView) getView().findViewById(R.id.ques_frag_operand_one);
-    TextView operandTwo = (TextView) getView().findViewById(R.id.ques_frag_operand_two);
-    operandOne.setText("" + question.getOperands().get(0));
-    operandTwo.setText("" + question.getOperands().get(1));
-
+    showOperandViews();
     updateOperator();
+    showAnswerView();
   }
 
-  private void showOperands() {
-    int numOperands = question.getNumOperands();
+  private void showOperandViews() {
     TextView currOperand;
+    RelativeLayout.LayoutParams params;
+    TypedArray operandIds = getResources().obtainTypedArray(R.array.id_array);
+    View prev = getView().findViewById(R.id.ques_frag_long_equation_line);
+
+    int numOperands = question.getNumOperands();
     for (int i = 0; i < numOperands; ++i) {
-      //currOperand = new TextView(getActivity());
+      params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+      params.addRule(RelativeLayout.ALIGN_RIGHT, prev.getId());
+      params.addRule(RelativeLayout.ABOVE, prev.getId());
+
+      currOperand = new TextView(getActivity());
+      currOperand.setId(operandIds.getResourceId(i, 0));
+      currOperand.setText("" + question.getOperands().get(i));
+      currOperand.setTextAppearance(getActivity(), android.R.style.TextAppearance_Large);
+      currOperand.setLayoutParams(params);
+      layoutContainer.addView(currOperand);
+      prev = currOperand;
     }
+    operandIds.recycle();
   }
 
   private void updateOperator() {
@@ -76,6 +89,37 @@ public class QuestionFragment extends Fragment {
         break;
       default:
         //Do nothing
+    }
+  }
+
+  private void showAnswerView() {
+    View equationLine = getView().findViewById(R.id.ques_frag_long_equation_line);
+    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+    params.addRule(RelativeLayout.ALIGN_RIGHT, equationLine.getId());
+    params.addRule(RelativeLayout.BELOW, equationLine.getId());
+
+    EditText answerView = new EditText(getActivity());
+    answerView.setId(R.id.ques_frag_answer);
+    answerView.setHint(R.string.ques_frag_answer_hint);
+    answerView.setGravity(Gravity.RIGHT);
+    answerView.setInputType(InputType.TYPE_CLASS_NUMBER);
+    answerView.setTextAppearance(getActivity(), android.R.style.TextAppearance_Large);
+    answerView.setPadding(0,0,0,0);
+    answerView.setBackgroundResource(0); //Removes background resource
+    answerView.setLayoutParams(params);
+    layoutContainer.addView(answerView);
+  }
+
+  private void removePreviousViews() {
+    if (layoutContainer.getChildCount() > 2) {
+      layoutContainer.removeView(getView().findViewById(R.id.ques_frag_answer));
+
+      int numOperands = question.getNumOperands();
+      TypedArray operandsId = getResources().obtainTypedArray(R.array.id_array);
+      for (int i = 0; i < numOperands; ++i) {
+        layoutContainer.removeView(getView().findViewById(operandsId.getResourceId(i, 0)));
+      }
+      operandsId.recycle();
     }
   }
 

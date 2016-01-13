@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <array
+    name="id_array">
+    <item>@id/ques_frag_operand_one</item>
+    <item>@id/ques_frag_operand_two</item>
+    <item>@id/ques_frag_operand_three</item>
+    <item>@id/ques_frag_operand_four</item>
+    <item>@id/ques_frag_operand_five</item>
+  </array>
+</resources>

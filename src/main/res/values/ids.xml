@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <item name="ques_frag_operand_one" type="id"/>
+  <item name="ques_frag_operand_two" type="id"/>
+  <item name="ques_frag_operand_three" type="id"/>
+  <item name="ques_frag_operand_four" type="id"/>
+  <item name="ques_frag_operand_five" type="id"/>
+  <item name="ques_frag_answer" type="id"/>
+</resources>

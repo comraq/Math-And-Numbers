@@ -12,7 +12,7 @@ import adam.mathandnumbers.QuestionBank.QuestionOptions;
  */
 public class Question {
   //TODO: Need to update numDigits based on the specified options;
-  private int numOperands = 2;
+  private int numOperands = 4;
 
   private QuestionType type;
   private List<QuestionOptions> options;
