@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -25,6 +26,7 @@ public class MulDivPreferenceFragment extends PreferenceFragment implements Pref
   private PreferenceCategory multiplicationCategory, divisionCategory;
   private SwitchPreference mulSw, divSw;
   private CheckBoxPreference mulCarryCheck, divRemainderCheck;
+  private ListPreference mulOperandsList, mulDigitsList, divOperandsList, divDigitsList;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,6 +56,20 @@ public class MulDivPreferenceFragment extends PreferenceFragment implements Pref
     mulCarryCheck = PreferenceFragmentUtilities.initCheckPref(getActivity(), R.string.check_pref_multi_carry_key);
     divRemainderCheck = PreferenceFragmentUtilities.initCheckPref(getActivity(), R.string.check_pref_div_remainder_key);
 
+    mulOperandsList = PreferenceFragmentUtilities.addListPref(getActivity(),
+      R.string.list_pref_num_operands_title, R.string.list_pref_num_operands_summary, R.string.list_pref_operands_dialog_title,
+      R.string.list_pref_mul_operands_key, R.array.mul_div_operands_array);
+    divOperandsList = PreferenceFragmentUtilities.addListPref(getActivity(),
+      R.string.list_pref_num_operands_title, R.string.list_pref_num_operands_summary, R.string.list_pref_operands_dialog_title,
+      R.string.list_pref_div_operands_key, R.array.mul_div_operands_array);
+
+    mulDigitsList = PreferenceFragmentUtilities.addListPref(getActivity(),
+      R.string.list_pref_num_digits_title, R.string.list_pref_num_digits_summary, R.string.list_pref_digits_dialog_title,
+      R.string.list_pref_mul_digits_key, R.array.mul_div_digits_array);
+    divDigitsList = PreferenceFragmentUtilities.addListPref(getActivity(),
+      R.string.list_pref_num_digits_title, R.string.list_pref_num_digits_summary, R.string.list_pref_digits_dialog_title,
+      R.string.list_pref_div_digits_key, R.array.mul_div_digits_array);
+
     setDefaultValues();
   }
 
@@ -64,6 +80,10 @@ public class MulDivPreferenceFragment extends PreferenceFragment implements Pref
     if (!pref.contains(QuestionType.DIVISION.toString())) divSw.setChecked(false);
     if (!pref.contains(getActivity().getString(R.string.check_pref_multi_carry_key))) mulCarryCheck.setChecked(false);
     if (!pref.contains(getActivity().getString(R.string.check_pref_div_remainder_key))) divRemainderCheck.setChecked(false);
+    if (!pref.contains(getActivity().getString(R.string.list_pref_mul_operands_key))) mulOperandsList.setValueIndex(0);
+    if (!pref.contains(getActivity().getString(R.string.list_pref_div_operands_key))) divOperandsList.setValueIndex(0);
+    if (!pref.contains(getActivity().getString(R.string.list_pref_mul_digits_key))) mulDigitsList.setValueIndex(1);
+    if (!pref.contains(getActivity().getString(R.string.list_pref_div_digits_key))) divDigitsList.setValueIndex(1);
   }
 
   @Override
@@ -72,20 +92,29 @@ public class MulDivPreferenceFragment extends PreferenceFragment implements Pref
     boolean checked = (boolean) newValue;
     PreferenceCategory category;
     CheckBoxPreference checkPref;
+    ListPreference operandsListPref, digitsListPref;
 
     if (key == QuestionType.MULTIPLICATION.toString()) {
       category = multiplicationCategory;
+      operandsListPref = mulOperandsList;
+      digitsListPref = mulDigitsList;
       checkPref = mulCarryCheck;
     } else if (key == QuestionType.DIVISION.toString()) {
       category = divisionCategory;
+      operandsListPref = divOperandsList;
+      digitsListPref = divDigitsList;
       checkPref = divRemainderCheck;
     } else {
       return false;
     }
 
     if (checked) {
+      category.addPreference(operandsListPref);
+      category.addPreference(digitsListPref);
       category.addPreference(checkPref);
     } else {
+      category.removePreference(operandsListPref);
+      category.removePreference(digitsListPref);
       category.removePreference(checkPref);
     }
     return true;

@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import adam.mathandnumbers.QuestionBank.QuestionType;
 import adam.mathandnumbers.QuestionBank.QuestionOptions;
 
@@ -23,12 +26,18 @@ import adam.mathandnumbers.QuestionBank.QuestionOptions;
  */
 public class QuestionFragment extends Fragment {
 
+  private static String OPERANDS = "questionOperands";
+  private static String QUESTION_TYPE = "questionType";
+  private static String NUM_OPERANDS = "numOperands";
+  private static String NUM_DIGITS = "numDigits";
+
   private Question question;
   private QuestionFragCommunicator comm;
   private RelativeLayout layoutContainer;
 
   public interface QuestionFragCommunicator {
     Question getNextQuestion();
+    Question restoreQuestion(int ordinal);
   }
 
   @Nullable
@@ -126,7 +135,33 @@ public class QuestionFragment extends Fragment {
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    showNextQuestion();
+
+    if (savedInstanceState == null) {
+      showNextQuestion();
+    } else {
+      question = comm.restoreQuestion(savedInstanceState.getInt(QUESTION_TYPE));
+      question.setOperands(savedInstanceState.getIntegerArrayList(OPERANDS));
+      question.setNumOperands(savedInstanceState.getInt(NUM_OPERANDS));
+      question.setNumDigits(savedInstanceState.getInt(NUM_DIGITS));
+
+      getActivity().setTitle(question.getType().title());
+
+      removePreviousViews();
+      showOperandViews();
+      updateOperator();
+      showAnswerView();
+    }
+
+  }
+
+  @Override
+  public void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+
+    outState.putIntegerArrayList(OPERANDS, question.getOperands());
+    outState.putInt(QUESTION_TYPE, question.getType().ordinal());
+    outState.putInt(NUM_OPERANDS, question.getNumOperands());
+    outState.putInt(NUM_DIGITS, question.getNumDigits());
   }
 
   @Override

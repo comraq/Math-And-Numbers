@@ -46,4 +46,20 @@
   <string name="ques_frag_operand_one">Operand1</string>
   <string name="ques_frag_operand_two">Operand2</string>
   <string name="ques_frag_answer_hint">Your Answer Here</string>
+
+  <string name="list_pref_num_operands_title">Operands</string>
+  <string name="list_pref_num_operands_summary">Specify the maximum number of operands to appear in this type of question</string>
+  <string name="list_pref_operands_dialog_title">Number of Operands</string>
+  <string name="list_pref_num_digits_title">Digits</string>
+  <string name="list_pref_num_digits_summary">Specify the maximum number of digits</string>
+  <string name="list_pref_digits_dialog_title">Maximum Number of Digits</string>
+
+  <string name="list_pref_add_operands_key">list_pref_add_operands_key</string>
+  <string name="list_pref_sub_operands_key">list_pref_sub_operands_key</string>
+  <string name="list_pref_div_operands_key">list_pref_div_operands_key</string>
+  <string name="list_pref_mul_operands_key">list_pref_mul_operands_key</string>
+  <string name="list_pref_add_digits_key">list_pref_add_digits_key</string>
+  <string name="list_pref_sub_digits_key">list_pref_sub_digits_key</string>
+  <string name="list_pref_mul_digits_key">list_pref_mul_digits_key</string>
+  <string name="list_pref_div_digits_key">list_pref_div_digits_key</string>
 </resources>

@@ -1,8 +1,10 @@
 package adam.mathandnumbers;
 
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import adam.mathandnumbers.QuestionFragment.QuestionFragCommunicator;
 import adam.mathandnumbers.ButtonPanelFragment.ButtonPanelFragCommunicator;
@@ -21,16 +23,24 @@ public class QuestionActivity extends AppCompatActivity implements QuestionFragC
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_question);
+
     questionBank = new QuestionBank(this, getSharedPreferences(MainActivity.DEFAULT_PREFERENCES, MODE_PRIVATE));
 
-    FragmentTransaction ft = getFragmentManager().beginTransaction();
-    ft.replace(R.id.question_act_ques_frag_container, new QuestionFragment());//, QUES_FRAG_TAG);
-    ft.replace(R.id.question_act_button_panel_frag_container, new ButtonPanelFragment());//, BUTTON_PANE_TAG);
-    ft.commit();
+    if (savedInstanceState == null) {
+      FragmentTransaction ft = getFragmentManager().beginTransaction();
+      ft.replace(R.id.question_act_ques_frag_container, new QuestionFragment());//, QUES_FRAG_TAG);
+      ft.replace(R.id.question_act_button_panel_frag_container, new ButtonPanelFragment());//, BUTTON_PANE_TAG);
+      ft.commit();
+    }
   }
 
   @Override
   public Question getNextQuestion() { return questionBank.getNextQuestion(); }
+
+  @Override
+  public Question restoreQuestion(int ordinal) {
+    return questionBank.restoreQuestion(ordinal);
+  }
 
   @Override
   public void checkAnswer() {
