@@ -12,7 +12,7 @@ import adam.mathandnumbers.ButtonPanelFragment.ButtonPanelFragCommunicator;
 /**
  * Created by adam on 2016-01-08.
  */
-public class QuestionActivity extends AppCompatActivity implements QuestionFragCommunicator, ButtonPanelFragCommunicator {
+public class QuestionActivity extends AppCompatActivity implements QuestionFragCommunicator, ButtonPanelFragCommunicator, CustomDialogFragment.CustomDialogListener {
 
   //private static final String QUES_FRAG_TAG = "ques_frag_tag";
   //private static final String BUTTON_PANE_TAG = "button_pane_tag";
@@ -43,8 +43,19 @@ public class QuestionActivity extends AppCompatActivity implements QuestionFragC
   }
 
   @Override
-  public void checkAnswer() {
+  public void showCheckDialog(boolean correct) {
+    if (correct) {
+      CustomDialogFragment dialogFrag = CustomDialogFragment.newInstance(this, R.string.dialog_correct_title, CustomDialogFragment.NULL_ID, R.string.dialog_button_next_question, R.string.dialog_button_close);
+      dialogFrag.show(getFragmentManager(), "Answer Correct Dialog");
+    } else {
 
+    }
+  }
+
+  @Override
+  public void checkAnswer() {
+    QuestionFragment qFrag = (QuestionFragment) getFragmentManager().findFragmentById(R.id.question_act_ques_frag_container);
+    qFrag.checkAnswer();
   }
 
   @Override
@@ -52,4 +63,7 @@ public class QuestionActivity extends AppCompatActivity implements QuestionFragC
     QuestionFragment qFrag = (QuestionFragment) getFragmentManager().findFragmentById(R.id.question_act_ques_frag_container);
     qFrag.showNextQuestion();
   }
+
+  @Override
+  public void doNegClick() { showNextQuestion(); }
 }

@@ -19,7 +19,7 @@ public class CustomDialogFragment extends DialogFragment {
   private static final String MESSAGE = "message";
   private static final String NEG_BUTTON = "neg";
   private static final String POS_BUTTON = "pos";
-  private static final int NULL_ID = 0;
+  public static final int NULL_ID = 0;
 
   private CustomDialogListener dialogListener;
 

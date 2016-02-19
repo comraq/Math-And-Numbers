@@ -21,9 +21,10 @@ public class Question {
   private int numOperands;
   private int numDigits;
 
-  private QuestionType type;
+  private final QuestionType type;
   private Set<QuestionOptions> options;
   private ArrayList<Integer> operands;
+  private int answer;
 
   public Question (QuestionType type) {
     this.type = type;
@@ -50,16 +51,34 @@ public class Question {
       default:
         //Do nothing!
     }
+    updateAnswer();
     return this;
   }
 
   private void genAdditionQuestion() {
-    int total = (int) Math.pow(10, numDigits);
-    //TODO: Generate operands as restricted by the specified options;
+    int remain = (int) Math.pow(10, numDigits);
+    int acc = 0;
     for (int i = 0; i < numOperands; ++i) {
-      operands.add(ThreadLocalRandom.current().nextInt(0, total));
-      total -= operands.get(i);
+      operands.add(0, getAddOperand(remain, acc));
+      remain -= operands.get(0);
+      acc += operands.get(0);
     }
+  }
+
+  private int getAddOperand(int remain, int acc) {
+    if (remain < 1)
+      return 0;
+
+    if (options.contains(QuestionOptions.CARRY))
+      return ThreadLocalRandom.current().nextInt(0, remain);
+
+    int result = 0;
+    for (int i = 1; i <= numDigits; ++i) {
+      int digit = (acc % ((int) Math.pow(10, i))) / ((int) Math.pow(10, i - 1));
+      int nextDigit = ThreadLocalRandom.current().nextInt(0, 10 - digit);
+      result += nextDigit * (int) Math.pow(10, i - 1);
+    }
+    return result;
   }
 
   private void genSubtractionQuestion() {
@@ -67,9 +86,26 @@ public class Question {
     int remain = operands.get(0);
     //TODO: Generate operands as restricted by the specified options;
     for (int i = 1; i < numOperands; ++i) {
-      operands.add(0, ThreadLocalRandom.current().nextInt(0, remain));
+      //operands.add(0, ThreadLocalRandom.current().nextInt(0, remain));
+      operands.add(0, getSubOperand(remain));
       remain -= operands.get(0);
     }
+  }
+
+  private int getSubOperand(int remain) {
+    if (remain < 1)
+      return 0;
+
+    if (options.contains(QuestionOptions.CARRY))
+      return ThreadLocalRandom.current().nextInt(0, remain);
+
+    int result = 0;
+    for (int i = 1; i <= numDigits; ++i) {
+      int digit = (remain % ((int) Math.pow(10, i))) / ((int) Math.pow(10, i - 1));
+      int nextDigit = (digit == 0)? 0 : ThreadLocalRandom.current().nextInt(0, digit);
+      result += nextDigit * (int) Math.pow(10, i - 1);
+    }
+    return result;
   }
 
   private void genMultiplicationQuestion() {
@@ -87,10 +123,10 @@ public class Question {
     int remain = operands.get(0);
     //TODO: Generate operands as restricted by the specified options;
     for (int i = 1; i < numOperands; ++i) {
+      if (remain < 2)
+        remain = 2;
       operands.add(0, ThreadLocalRandom.current().nextInt(1, remain));
       remain /= operands.get(0);
-      if (remain == 1)
-        remain = 2;
     }
   }
 
@@ -104,13 +140,43 @@ public class Question {
     }
   }
 
-  public void setQuestionType(QuestionType type) { this.type = type; }
-
   public void setNumDigits(int maxDigits) { this.numDigits = maxDigits; }
 
   public void setNumOperands(int maxOperands) { this.numOperands = maxOperands; }
 
-  public void setOperands(ArrayList<Integer> operands) { this.operands = operands; }
+  public void setOperands(ArrayList<Integer> operands) {
+    this.operands = operands;
+    updateAnswer();
+  }
+
+  private void updateAnswer() {
+    switch(type) {
+      case ADDITION:
+        answer = 0;
+        for (Integer operand: operands)
+          answer += operand;
+        break;
+      case SUBTRACTION:
+        answer = operands.get(operands.size() - 1);
+        for (int i = 0; i < operands.size() - 1; ++i)
+          answer -= operands.get(i);
+        break;
+      case MULTIPLICATION:
+        answer = 1;
+        for (Integer operand: operands)
+          answer *= operand;
+        break;
+      case DIVISION:
+        answer = operands.get(operands.size() - 1);
+        for (int i = 0; i < operands.size() - 1; ++i)
+          answer /= operands.get(i);
+        break;
+      default:
+        //Do nothing!
+    }
+  }
+
+  public int getAnswer() { return answer; }
 
   public void includeOption(QuestionOptions option) { options.add(option); }
 

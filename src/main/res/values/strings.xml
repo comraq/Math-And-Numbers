@@ -62,4 +62,7 @@
   <string name="list_pref_sub_digits_key">list_pref_sub_digits_key</string>
   <string name="list_pref_mul_digits_key">list_pref_mul_digits_key</string>
   <string name="list_pref_div_digits_key">list_pref_div_digits_key</string>
+  <string name="dialog_button_close">Close</string>
+  <string name="dialog_button_next_question">Next Question</string>
+  <string name="dialog_correct_title">Correct!</string>
 </resources>

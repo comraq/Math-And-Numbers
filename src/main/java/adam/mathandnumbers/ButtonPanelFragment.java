@@ -1,7 +1,7 @@
 package adam.mathandnumbers;
 
 import android.app.Activity;
-import android.app.DialogFragment;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,7 +13,7 @@ import android.widget.Button;
 /**
  * Created by adam on 2016-01-10.
  */
-public class ButtonPanelFragment extends DialogFragment implements View.OnClickListener {
+public class ButtonPanelFragment extends Fragment implements View.OnClickListener {
 
   private Button checkButton, nextButton;
   private ButtonPanelFragCommunicator comm;
@@ -31,7 +31,6 @@ public class ButtonPanelFragment extends DialogFragment implements View.OnClickL
         break;
       case R.id.button_panel_frag_button_next:
         comm.showNextQuestion();
-        Log.i("qBank", "nextButton clicked");
         break;
       default:
         //Do nothing

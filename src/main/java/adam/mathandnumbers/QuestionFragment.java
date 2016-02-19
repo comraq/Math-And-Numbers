@@ -3,6 +3,7 @@ package adam.mathandnumbers;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.InputType;
@@ -31,6 +32,9 @@ public class QuestionFragment extends Fragment {
   private static String NUM_OPERANDS = "numOperands";
   private static String NUM_DIGITS = "numDigits";
 
+  private static int COLOUR_CORRECT = Color.GREEN;
+  private static int COLOUR_INCORRECT = Color.RED;
+
   private Question question;
   private QuestionFragCommunicator comm;
   private RelativeLayout layoutContainer;
@@ -38,6 +42,7 @@ public class QuestionFragment extends Fragment {
   public interface QuestionFragCommunicator {
     Question getNextQuestion();
     Question restoreQuestion(int ordinal);
+    void showCheckDialog(boolean correct);
   }
 
   @Nullable
@@ -56,6 +61,22 @@ public class QuestionFragment extends Fragment {
     showOperandViews();
     updateOperator();
     showAnswerView();
+  }
+
+  public void checkAnswer() {
+    EditText answerView = (EditText) getView().findViewById(R.id.ques_frag_answer);
+    try {
+      if (Integer.parseInt(answerView.getText().toString()) == question.getAnswer()) {
+        answerView.setBackgroundColor(COLOUR_CORRECT);
+        comm.showCheckDialog(true);
+      } else {
+        answerView.setBackgroundColor(COLOUR_INCORRECT);
+        comm.showCheckDialog(false);
+      }
+    } catch (NumberFormatException e) {
+      answerView.setBackgroundColor(COLOUR_INCORRECT);
+      comm.showCheckDialog(false);
+    }
   }
 
   private void showOperandViews() {
