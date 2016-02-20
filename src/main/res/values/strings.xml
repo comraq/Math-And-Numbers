@@ -65,4 +65,7 @@
   <string name="dialog_button_close">Close</string>
   <string name="dialog_button_next_question">Next Question</string>
   <string name="dialog_correct_title">Correct!</string>
+  <string name="dialog_incorrect_title">Incorrect!</string>
+  <string name="dialog_button_show_answer">Reveal Answer</string>
+  <string name="dialog_show_answer_title">Answer Is</string>
 </resources>

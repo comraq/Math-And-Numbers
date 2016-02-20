@@ -2,6 +2,7 @@ package adam.mathandnumbers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +43,6 @@ public class QuestionBank {
     Question q;
 
     for (QuestionType type : QUESTION_TYPES) {
-      //Log.i("qtype", questionType.toString() + " or " + questionType);
       if (pref.getBoolean(type.toString(), false)) {
         q = new Question(type);
         setQuestionOptions(q, context, pref);

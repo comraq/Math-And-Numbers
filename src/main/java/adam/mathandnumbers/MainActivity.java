@@ -6,8 +6,13 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.MainCommunicator, SettingsPreferenceFragment.SettingsCommunicator, CustomDialogFragment.CustomDialogListener {
 
@@ -73,12 +78,18 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
   }
 
   private void promptQuit() {
-    CustomDialogFragment dialogFrag = CustomDialogFragment.newInstance(this, R.string.dialog_quit_title, R.string.dialog_quit_message, R.string.dialog_button_yes, R.string.dialog_button_cancel);
+    Map<CustomDialogFragment.DialogKeys, String> mapBundle = new HashMap<>();
+    mapBundle.put(CustomDialogFragment.DialogKeys.TITLE, getString(R.string.dialog_quit_title));
+    mapBundle.put(CustomDialogFragment.DialogKeys.MESSAGE, getString(R.string.dialog_quit_message));
+    mapBundle.put(CustomDialogFragment.DialogKeys.NEG_BUTTON, getString(R.string.dialog_button_yes));
+    mapBundle.put(CustomDialogFragment.DialogKeys.POS_BUTTON, getString(R.string.dialog_button_cancel));
+
+    CustomDialogFragment dialogFrag = CustomDialogFragment.newInstance(mapBundle);
     dialogFrag.show(getFragmentManager(), "Quit Dialog");
   }
 
   @Override
-  public void doNegClick() { finish(); }
+  public void doNegClick(String negButton) { finish(); }
 
   /**
    * Overrides back button navigation with fragments

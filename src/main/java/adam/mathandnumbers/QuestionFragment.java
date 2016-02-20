@@ -16,12 +16,6 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import adam.mathandnumbers.QuestionBank.QuestionType;
-import adam.mathandnumbers.QuestionBank.QuestionOptions;
-
 /**
  * Created by adam on 2016-01-09.
  */
@@ -42,7 +36,7 @@ public class QuestionFragment extends Fragment {
   public interface QuestionFragCommunicator {
     Question getNextQuestion();
     Question restoreQuestion(int ordinal);
-    void showCheckDialog(boolean correct);
+    void showCheckDialog(boolean correct, String answer);
   }
 
   @Nullable
@@ -65,17 +59,18 @@ public class QuestionFragment extends Fragment {
 
   public void checkAnswer() {
     EditText answerView = (EditText) getView().findViewById(R.id.ques_frag_answer);
+    String answer = String.valueOf(question.getAnswer());
     try {
       if (Integer.parseInt(answerView.getText().toString()) == question.getAnswer()) {
         answerView.setBackgroundColor(COLOUR_CORRECT);
-        comm.showCheckDialog(true);
+        comm.showCheckDialog(true, answer);
       } else {
         answerView.setBackgroundColor(COLOUR_INCORRECT);
-        comm.showCheckDialog(false);
+        comm.showCheckDialog(false, answer);
       }
     } catch (NumberFormatException e) {
       answerView.setBackgroundColor(COLOUR_INCORRECT);
-      comm.showCheckDialog(false);
+      comm.showCheckDialog(false, answer);
     }
   }
 
