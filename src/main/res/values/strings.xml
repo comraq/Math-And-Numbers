@@ -68,4 +68,7 @@
   <string name="dialog_incorrect_title">Incorrect!</string>
   <string name="dialog_button_show_answer">Reveal Answer</string>
   <string name="dialog_show_answer_title">Answer Is</string>
+  <string name="dialog_invalid_settings_title">Invalid Settings!</string>
+  <string name="dialog_invalid_settings_message">No question types specified!</string>
+  <string name="dialog_button_settings">Settings</string>
 </resources>

@@ -36,7 +36,7 @@ public class QuestionBank {
   }
 
   private Map<QuestionType, Question> questions;
-  private static QuestionType[] QUESTION_TYPES = QuestionType.values();
+  public static QuestionType[] QUESTION_TYPES = QuestionType.values();
 
   public QuestionBank(Context context, SharedPreferences pref) {
     questions = new HashMap<>();
@@ -81,8 +81,8 @@ public class QuestionBank {
         break;
 
       case MULTIPLICATION:
-        if (pref.getBoolean(context.getString(R.string.check_pref_multi_carry_key), false))
-          q.includeOption(QuestionOptions.CARRY);
+        //if (pref.getBoolean(context.getString(R.string.check_pref_multi_carry_key), false))
+        //  q.includeOption(QuestionOptions.CARRY);
 
         q.setNumOperands(Integer.parseInt(pref.getString(context.getString(R.string.list_pref_mul_operands_key), "2")));
         q.setNumDigits(Integer.parseInt(pref.getString(context.getString(R.string.list_pref_mul_digits_key), "2")));

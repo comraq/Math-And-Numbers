@@ -25,7 +25,8 @@ public class MulDivPreferenceFragment extends PreferenceFragment implements Pref
   private PreferenceScreen mainScreen;
   private PreferenceCategory multiplicationCategory, divisionCategory;
   private SwitchPreference mulSw, divSw;
-  private CheckBoxPreference mulCarryCheck, divRemainderCheck;
+  //private CheckBoxPreference mulCarryCheck, divRemainderCheck;
+  private CheckBoxPreference divRemainderCheck;
   private ListPreference mulOperandsList, mulDigitsList, divOperandsList, divDigitsList;
 
   @Override
@@ -53,7 +54,7 @@ public class MulDivPreferenceFragment extends PreferenceFragment implements Pref
     mulSw = PreferenceFragmentUtilities.initCategory(getActivity(), this, multiplicationCategory, QuestionType.MULTIPLICATION.toString());
     divSw = PreferenceFragmentUtilities.initCategory(getActivity(), this, divisionCategory, QuestionType.DIVISION.toString());
 
-    mulCarryCheck = PreferenceFragmentUtilities.initCheckPref(getActivity(), R.string.check_pref_multi_carry_key);
+    //mulCarryCheck = PreferenceFragmentUtilities.initCheckPref(getActivity(), R.string.check_pref_multi_carry_key);
     divRemainderCheck = PreferenceFragmentUtilities.initCheckPref(getActivity(), R.string.check_pref_div_remainder_key);
 
     mulOperandsList = PreferenceFragmentUtilities.addListPref(getActivity(),
@@ -78,7 +79,7 @@ public class MulDivPreferenceFragment extends PreferenceFragment implements Pref
 
     if (!pref.contains(QuestionType.MULTIPLICATION.toString())) mulSw.setChecked(false);
     if (!pref.contains(QuestionType.DIVISION.toString())) divSw.setChecked(false);
-    if (!pref.contains(getActivity().getString(R.string.check_pref_multi_carry_key))) mulCarryCheck.setChecked(false);
+    //if (!pref.contains(getActivity().getString(R.string.check_pref_multi_carry_key))) mulCarryCheck.setChecked(false);
     if (!pref.contains(getActivity().getString(R.string.check_pref_div_remainder_key))) divRemainderCheck.setChecked(false);
     if (!pref.contains(getActivity().getString(R.string.list_pref_mul_operands_key))) mulOperandsList.setValueIndex(0);
     if (!pref.contains(getActivity().getString(R.string.list_pref_div_operands_key))) divOperandsList.setValueIndex(0);
@@ -91,14 +92,14 @@ public class MulDivPreferenceFragment extends PreferenceFragment implements Pref
     String key = preference.getKey();
     boolean checked = (boolean) newValue;
     PreferenceCategory category;
-    CheckBoxPreference checkPref;
+    CheckBoxPreference checkPref = null;
     ListPreference operandsListPref, digitsListPref;
 
     if (key == QuestionType.MULTIPLICATION.toString()) {
       category = multiplicationCategory;
       operandsListPref = mulOperandsList;
       digitsListPref = mulDigitsList;
-      checkPref = mulCarryCheck;
+      //checkPref = mulCarryCheck;
     } else if (key == QuestionType.DIVISION.toString()) {
       category = divisionCategory;
       operandsListPref = divOperandsList;
@@ -111,11 +112,13 @@ public class MulDivPreferenceFragment extends PreferenceFragment implements Pref
     if (checked) {
       category.addPreference(operandsListPref);
       category.addPreference(digitsListPref);
-      category.addPreference(checkPref);
+      if (checkPref != null)
+        category.addPreference(checkPref);
     } else {
       category.removePreference(operandsListPref);
       category.removePreference(digitsListPref);
-      category.removePreference(checkPref);
+      if (checkPref != null)
+        category.removePreference(checkPref);
     }
     return true;
   }

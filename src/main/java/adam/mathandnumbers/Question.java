@@ -84,9 +84,7 @@ public class Question {
   private void genSubtractionQuestion() {
     operands.add(ThreadLocalRandom.current().nextInt(0, (int) Math.pow(10, numDigits)));
     int remain = operands.get(0);
-    //TODO: Generate operands as restricted by the specified options;
     for (int i = 1; i < numOperands; ++i) {
-      //operands.add(0, ThreadLocalRandom.current().nextInt(0, remain));
       operands.add(0, getSubOperand(remain));
       remain -= operands.get(0);
     }
@@ -112,9 +110,11 @@ public class Question {
     int total = (int) Math.pow(10, numDigits);
     //TODO: Generate operands as restricted by the specified options;
     for (int i = 0; i < numOperands; ++i) {
-      operands.add(ThreadLocalRandom.current().nextInt(0, total));
-      if (operands.get(i) != 0)
+      operands.add(0, ThreadLocalRandom.current().nextInt(0, total));
+      if (operands.get(0) != 0)
         total /= operands.get(i);
+
+      total = (total < 10)? 10 : total;
     }
   }
 

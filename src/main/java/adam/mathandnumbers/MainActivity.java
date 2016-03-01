@@ -2,11 +2,11 @@ package adam.mathandnumbers;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -64,8 +64,32 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
   }
 
   private void showQuestionActivity() {
+    SharedPreferences pref = getSharedPreferences(DEFAULT_PREFERENCES, MODE_PRIVATE);
+    File f = new File("/data/data/" + getPackageName() + "/shared_prefs/" + MainActivity.DEFAULT_PREFERENCES + ".xml");
+    if (f.exists()) {
+      for (QuestionBank.QuestionType type : QuestionBank.QUESTION_TYPES) {
+        if (pref.getBoolean(type.toString(), false)) {
+          Intent i = new Intent(this, QuestionActivity.class);
+          startActivity(i);
+          return;
+        }
+      }
+      showInvalidSettingsDialog();
+      return;
+    }
     Intent i = new Intent(this, QuestionActivity.class);
     startActivity(i);
+  }
+
+  private void showInvalidSettingsDialog() {
+    Map<CustomDialogFragment.DialogKeys, String> mapBundle = new HashMap<>();
+    mapBundle.put(CustomDialogFragment.DialogKeys.TITLE, getString(R.string.dialog_invalid_settings_title));
+    mapBundle.put(CustomDialogFragment.DialogKeys.MESSAGE, getString(R.string.dialog_invalid_settings_message));
+    mapBundle.put(CustomDialogFragment.DialogKeys.NEG_BUTTON, getString(R.string.dialog_button_settings));
+    mapBundle.put(CustomDialogFragment.DialogKeys.POS_BUTTON, getString(R.string.dialog_button_cancel));
+
+    CustomDialogFragment dialogFrag = CustomDialogFragment.newInstance(mapBundle);
+    dialogFrag.show(getFragmentManager(), "Invalid Settings Dialog");
   }
 
   private void showSettingsPreferenceFragment() {
@@ -89,7 +113,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
   }
 
   @Override
-  public void doNegClick(String negButton) { finish(); }
+  public void doNegClick(String negButton) {
+    if (negButton.equals(getString(R.string.dialog_button_yes)))
+      finish();
+    else if (negButton.equals(getString(R.string.dialog_button_settings)))
+      showSettingsPreferenceFragment();
+  }
 
   /**
    * Overrides back button navigation with fragments
@@ -104,13 +133,19 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
   }
 
   @Override
-  public void startButtonClicked() { showQuestionActivity(); }
+  public void startButtonClicked() {
+    showQuestionActivity();
+  }
 
   @Override
-  public void settingsButtonClicked() { showSettingsPreferenceFragment();  }
+  public void settingsButtonClicked() {
+    showSettingsPreferenceFragment();
+  }
 
   @Override
-  public void exitButtonClick(){ promptQuit(); }
+  public void exitButtonClick() {
+    promptQuit();
+  }
 
   @Override
   public void addSubClicked() {
