@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -75,53 +76,100 @@ public class QuestionFragment extends Fragment {
   }
 
   private void showOperandViews() {
-    TextView currOperand;
     RelativeLayout.LayoutParams params;
     TypedArray operandIds = getResources().obtainTypedArray(R.array.id_array);
     View prev = getView().findViewById(R.id.ques_frag_long_equation_line);
 
     int numOperands = question.getNumOperands();
-    for (int i = 0; i < numOperands; ++i) {
+    if (question.getType() != QuestionBank.QuestionType.DIVISION) {
+      TextView currOperand;
+      for (int i = 0; i < numOperands; ++i) {
+        params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_RIGHT, prev.getId());
+        params.addRule(RelativeLayout.ABOVE, prev.getId());
+
+        currOperand = new TextView(getActivity());
+        currOperand.setId(operandIds.getResourceId(i, 0));
+        currOperand.setText("" + question.getOperands().get(i));
+        currOperand.setTextAppearance(getActivity(), android.R.style.TextAppearance_Large);
+        currOperand.setLayoutParams(params);
+        layoutContainer.addView(currOperand);
+        prev = currOperand;
+      }
+    } else {
       params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
       params.addRule(RelativeLayout.ALIGN_RIGHT, prev.getId());
-      params.addRule(RelativeLayout.ABOVE, prev.getId());
+      params.addRule(RelativeLayout.BELOW, prev.getId());
 
-      currOperand = new TextView(getActivity());
-      currOperand.setId(operandIds.getResourceId(i, 0));
-      currOperand.setText("" + question.getOperands().get(i));
-      currOperand.setTextAppearance(getActivity(), android.R.style.TextAppearance_Large);
-      currOperand.setLayoutParams(params);
-      layoutContainer.addView(currOperand);
-      prev = currOperand;
+      TextView dividend = new TextView(getActivity());
+      dividend.setId(operandIds.getResourceId(1, 0));
+      dividend.setText("" + question.getOperands().get(1));
+      dividend.setTextAppearance(getActivity(), android.R.style.TextAppearance_Large);
+      dividend.setLayoutParams(params);
+      layoutContainer.addView(dividend);
+
+      params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+      params.addRule(RelativeLayout.LEFT_OF, R.id.ques_frag_operator);
+      params.addRule(RelativeLayout.BELOW, prev.getId());
+
+      TextView divisor = new TextView(getActivity());
+      divisor.setId(operandIds.getResourceId(0, 0));
+      divisor.setText("" + question.getOperands().get(0));
+      divisor.setTextAppearance(getActivity(), android.R.style.TextAppearance_Large);
+      divisor.setLayoutParams(params);
+      layoutContainer.addView(divisor);
     }
     operandIds.recycle();
   }
 
   private void updateOperator() {
-    TextView operator = (TextView) getActivity().findViewById(R.id.ques_frag_operator);
-    switch (question.getType()) {
-      case ADDITION:
-        operator.setText("\u002B"); //Unicode for Addition Symbol
-        break;
-      case SUBTRACTION:
-        operator.setText("\u2212"); //Unicode for Subtraction Symbol
-        break;
-      case MULTIPLICATION:
-        operator.setText("\u00D7"); //Unicode for Multiplication Symbol
-        break;
-      case DIVISION:
-        operator.setText("\u00F7"); //Unicode for Division Symbol
-        break;
-      default:
-        //Do nothing
+    View equationLine = getView().findViewById(R.id.ques_frag_long_equation_line);
+
+    View operatorView = null;
+    RelativeLayout.LayoutParams params = null;
+    if (question.getType() != QuestionBank.QuestionType.DIVISION) {
+      operatorView = new TextView(getActivity());
+      params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT);
+      params.addRule(RelativeLayout.ALIGN_LEFT, equationLine.getId());
+      params.addRule(RelativeLayout.ABOVE, equationLine.getId());
+
+      ((TextView) operatorView).setGravity(Gravity.LEFT);
+      ((TextView) operatorView).setTextAppearance(getActivity(), android.R.style.TextAppearance_Large);
+      switch (question.getType()) {
+        case ADDITION:
+          ((TextView) operatorView).setText("\u002B"); //Unicode for Addition Symbol
+          break;
+        case SUBTRACTION:
+          ((TextView) operatorView).setText("\u2212"); //Unicode for Subtraction Symbol
+          break;
+        case MULTIPLICATION:
+          ((TextView) operatorView).setText("\u00D7"); //Unicode for Multiplication Symbol
+          break;
+        default:
+          ((TextView) operatorView).setText(""); //Empty String
+      }
+    } else {
+      operatorView = new QuarterCircleView(getActivity());
+
+      float scale = getResources().getDisplayMetrics().density;
+      params = new RelativeLayout.LayoutParams((int) (40 * scale), (int) (65 * scale));
+      params.addRule(RelativeLayout.LEFT_OF, equationLine.getId());
+      params.addRule(RelativeLayout.CENTER_VERTICAL);
     }
+    operatorView.setId(R.id.ques_frag_operator);
+    operatorView.setLayoutParams(params);
+    layoutContainer.addView(operatorView);
   }
 
   private void showAnswerView() {
     View equationLine = getView().findViewById(R.id.ques_frag_long_equation_line);
     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     params.addRule(RelativeLayout.ALIGN_RIGHT, equationLine.getId());
-    params.addRule(RelativeLayout.BELOW, equationLine.getId());
+    if (question.getType() != QuestionBank.QuestionType.DIVISION)
+      params.addRule(RelativeLayout.BELOW, equationLine.getId());
+    else
+      params.addRule(RelativeLayout.ABOVE, equationLine.getId());
 
     EditText answerView = new EditText(getActivity());
     answerView.setId(R.id.ques_frag_answer);
@@ -129,7 +177,7 @@ public class QuestionFragment extends Fragment {
     answerView.setGravity(Gravity.RIGHT);
     answerView.setInputType(InputType.TYPE_CLASS_NUMBER);
     answerView.setTextAppearance(getActivity(), android.R.style.TextAppearance_Large);
-    answerView.setPadding(0,0,0,0);
+    answerView.setPadding(0, 0, 0, 0);
     answerView.setBackgroundResource(0); //Removes background resource
     answerView.setLayoutParams(params);
     layoutContainer.addView(answerView);
@@ -138,6 +186,7 @@ public class QuestionFragment extends Fragment {
   private void removePreviousViews() {
     if (layoutContainer.getChildCount() > 2) {
       layoutContainer.removeView(getView().findViewById(R.id.ques_frag_answer));
+      layoutContainer.removeView(getView().findViewById(R.id.ques_frag_operator));
 
       int numOperands = question.getNumOperands();
       TypedArray operandsId = getResources().obtainTypedArray(R.array.id_array);
@@ -167,7 +216,6 @@ public class QuestionFragment extends Fragment {
       updateOperator();
       showAnswerView();
     }
-
   }
 
   @Override

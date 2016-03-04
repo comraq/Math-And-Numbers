@@ -90,31 +90,32 @@ public class AddSubPreferenceFragment extends PreferenceFragment implements Pref
     String key = preference.getKey();
     boolean checked = (boolean) newValue;
     PreferenceCategory category;
-    CheckBoxPreference checkPref;
-    ListPreference operandsListPref, digitsListPref;
+    Preference[] prefArray = new Preference[3];
 
     if (key == QuestionType.ADDITION.toString()) {
       category = additionCategory;
-      operandsListPref = addOperandsList;
-      digitsListPref = addDigitsList;
-      checkPref = addCarryCheck;
+      prefArray[0] = addOperandsList;
+      prefArray[1] = addDigitsList;
+      prefArray[2] = addCarryCheck;
     } else if (key == QuestionType.SUBTRACTION.toString()) {
       category = subtractionCategory;
-      operandsListPref = subOperandsList;
-      digitsListPref = subDigitsList;
-      checkPref = subCarryCheck;
+      prefArray[0] = subOperandsList;
+      prefArray[1] = subDigitsList;
+      prefArray[2] = subCarryCheck;
     } else {
       return false;
     }
 
     if (checked) {
-      category.addPreference(operandsListPref);
-      category.addPreference(digitsListPref);
-      category.addPreference(checkPref);
+      for (int i = 0; i < prefArray.length; ++i) {
+        if (prefArray[i] != null)
+          category.addPreference(prefArray[i]);
+      }
     } else {
-      category.removePreference(operandsListPref);
-      category.removePreference(digitsListPref);
-      category.removePreference(checkPref);
+      for (int i = 0; i < prefArray.length; ++i) {
+        if (prefArray[i] != null)
+          category.removePreference(prefArray[i]);
+      }
     }
     return true;
   }

@@ -81,9 +81,6 @@ public class QuestionBank {
         break;
 
       case MULTIPLICATION:
-        //if (pref.getBoolean(context.getString(R.string.check_pref_multi_carry_key), false))
-        //  q.includeOption(QuestionOptions.CARRY);
-
         q.setNumOperands(Integer.parseInt(pref.getString(context.getString(R.string.list_pref_mul_operands_key), "2")));
         q.setNumDigits(Integer.parseInt(pref.getString(context.getString(R.string.list_pref_mul_digits_key), "2")));
         break;
@@ -92,7 +89,7 @@ public class QuestionBank {
         if (pref.getBoolean(context.getString(R.string.check_pref_div_remainder_key), false))
           q.includeOption(QuestionOptions.REMAINDER);
 
-        q.setNumOperands(Integer.parseInt(pref.getString(context.getString(R.string.list_pref_div_operands_key), "2")));
+        q.setNumOperands(2); //Number of Operands for Division Question will always be 2
         q.setNumDigits(Integer.parseInt(pref.getString(context.getString(R.string.list_pref_div_digits_key), "2")));
         break;
 
