@@ -1,10 +1,8 @@
 package adam.mathandnumbers;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -121,13 +119,27 @@ public class Question {
   private void genDivisionQuestion() {
     operands.add(ThreadLocalRandom.current().nextInt(1, (int) Math.pow(10, numDigits)));
     int remain = operands.get(0);
-    //TODO: Generate operands as restricted by the specified options;
     for (int i = 1; i < numOperands; ++i) {
       if (remain < 2)
         remain = 2;
       operands.add(0, ThreadLocalRandom.current().nextInt(1, remain));
       remain /= operands.get(0);
     }
+    adjustForRemainder();
+  }
+
+  //Check whether the remainder option is set and adjust the operands accordingly
+  private void adjustForRemainder() {
+    if (options.contains(QuestionOptions.REMAINDER))
+      return;
+
+    int dividend = operands.get(1), divisor = operands.get(0);
+    int remainder = dividend % divisor;
+    boolean increase = new Random().nextBoolean();
+    if (increase && (divisor - remainder + dividend) < (int)Math.pow(10, numDigits))
+      operands.set(1, divisor - remainder + dividend);
+    else
+      operands.set(1, dividend - remainder);
   }
 
   public QuestionType getType() { return type; }
