@@ -7,8 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.InputType;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,17 +58,30 @@ public class QuestionFragment extends Fragment {
 
   public void checkAnswer() {
     EditText answerView = (EditText) getView().findViewById(R.id.ques_frag_answer);
+    EditText remainderView = (EditText) getView().findViewById(R.id.ques_frag_remainder_view);
     String answer = String.valueOf(question.getAnswer());
+    boolean remainder = question.checkOptions(QuestionBank.QuestionOptions.REMAINDER);
+    if (remainder)
+      answer +=  " Remainder: " + String.valueOf(question.getAnswerRemainder());
+
     try {
-      if (Integer.parseInt(answerView.getText().toString()) == question.getAnswer()) {
-        answerView.setBackgroundColor(COLOUR_CORRECT);
-        comm.showCheckDialog(true, answer);
-      } else {
+      if (Integer.parseInt(answerView.getText().toString()) != question.getAnswer()
+          || (remainder && Integer.parseInt(remainderView.getText().toString())
+                           != question.getAnswerRemainder())) {
         answerView.setBackgroundColor(COLOUR_INCORRECT);
+        if (remainder)
+          remainderView.setBackgroundColor(COLOUR_INCORRECT);
         comm.showCheckDialog(false, answer);
+      } else {
+        answerView.setBackgroundColor(COLOUR_CORRECT);
+        if (remainder)
+          remainderView.setBackgroundColor(COLOUR_CORRECT);
+        comm.showCheckDialog(true, answer);
       }
     } catch (NumberFormatException e) {
       answerView.setBackgroundColor(COLOUR_INCORRECT);
+      if (remainder)
+        remainderView.setBackgroundColor(COLOUR_INCORRECT);
       comm.showCheckDialog(false, answer);
     }
   }
@@ -181,12 +192,46 @@ public class QuestionFragment extends Fragment {
     answerView.setBackgroundResource(0); //Removes background resource
     answerView.setLayoutParams(params);
     layoutContainer.addView(answerView);
+
+    if (question != null && question.checkOptions(QuestionBank.QuestionOptions.REMAINDER)) {
+      params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT);
+      params.addRule(RelativeLayout.ALIGN_BOTTOM, answerView.getId());
+      params.addRule(RelativeLayout.RIGHT_OF, answerView.getId());
+
+      TextView remainderLabel = new TextView(getActivity());
+      remainderLabel.setId(R.id.ques_frag_remainder_label);
+      remainderLabel.setTextAppearance(getActivity(), android.R.style.TextAppearance_Large);
+      remainderLabel.setText(R.string.ques_frag_remainder_label);
+      remainderLabel.setLayoutParams(params);
+      layoutContainer.addView(remainderLabel);
+
+      params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT);
+      params.addRule(RelativeLayout.ALIGN_BOTTOM, remainderLabel.getId());
+      params.addRule(RelativeLayout.RIGHT_OF, remainderLabel.getId());
+
+      EditText remainderView = new EditText(getActivity());
+      remainderView.setId(R.id.ques_frag_remainder_view);
+      remainderView.setHint(R.string.ques_frag_remainder_view_hint);
+      remainderView.setGravity(Gravity.LEFT);
+      remainderView.setInputType(InputType.TYPE_CLASS_NUMBER);
+      remainderView.setTextAppearance(getActivity(), android.R.style.TextAppearance_Large);
+      remainderView.setPadding(0, 0, 0, 0);
+      remainderView.setBackgroundResource(0); //Removes background resource
+      remainderView.setLayoutParams(params);
+      layoutContainer.addView(remainderView);
+    }
   }
 
   private void removePreviousViews() {
     if (layoutContainer.getChildCount() > 2) {
       layoutContainer.removeView(getView().findViewById(R.id.ques_frag_answer));
       layoutContainer.removeView(getView().findViewById(R.id.ques_frag_operator));
+      if (getView().findViewById(R.id.ques_frag_remainder_label) != null)
+        layoutContainer.removeView(getView().findViewById(R.id.ques_frag_remainder_label));
+      if (getView().findViewById(R.id.ques_frag_remainder_view) != null)
+        layoutContainer.removeView(getView().findViewById(R.id.ques_frag_remainder_view));
 
       int numOperands = question.getNumOperands();
       TypedArray operandsId = getResources().obtainTypedArray(R.array.id_array);

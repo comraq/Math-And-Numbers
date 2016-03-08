@@ -5,11 +5,6 @@
   <string name="action_exit">Exit</string>
   <string name="action_start">Start</string>
 
-  <string name="dialog_quit_title">Exiting the Application</string>
-  <string name="dialog_quit_message">Are you sure you want to quit?</string>
-  <string name="dialog_button_yes">Yes</string>
-  <string name="dialog_button_cancel">Cancel</string>
-
   <string name="main_frag_button_exit">Exit</string>
   <string name="main_frag_button_settings">Settings</string>
   <string name="main_frag_button_start">Start</string>
@@ -62,13 +57,22 @@
   <string name="list_pref_sub_digits_key">list_pref_sub_digits_key</string>
   <string name="list_pref_mul_digits_key">list_pref_mul_digits_key</string>
   <string name="list_pref_div_digits_key">list_pref_div_digits_key</string>
-  <string name="dialog_button_close">Close</string>
-  <string name="dialog_button_next_question">Next Question</string>
-  <string name="dialog_correct_title">Correct!</string>
-  <string name="dialog_incorrect_title">Incorrect!</string>
-  <string name="dialog_button_show_answer">Reveal Answer</string>
-  <string name="dialog_show_answer_title">Answer Is</string>
+
+  <string name="dialog_quit_title">Exiting the Application</string>
+  <string name="dialog_quit_message">Are you sure you want to quit?</string>
   <string name="dialog_invalid_settings_title">Invalid Settings!</string>
   <string name="dialog_invalid_settings_message">No question types specified!</string>
+  <string name="dialog_correct_title">Correct!</string>
+  <string name="dialog_incorrect_title">Incorrect!</string>
+  <string name="dialog_show_answer_title">Answer is</string>
+
+  <string name="dialog_button_show_answer">Reveal Answer</string>
   <string name="dialog_button_settings">Settings</string>
+  <string name="dialog_button_yes">Yes</string>
+  <string name="dialog_button_cancel">Cancel</string>
+  <string name="dialog_button_close">Close</string>
+  <string name="dialog_button_next_question">Next Question</string>
+  <string name="ques_frag_remainder_label">" R "</string>
+  <string name="ques_frag_remainder_view_hint">Remainder</string>
+
 </resources>

@@ -2,7 +2,6 @@ package adam.mathandnumbers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -89,7 +88,7 @@ public class QuestionBank {
         if (pref.getBoolean(context.getString(R.string.check_pref_div_remainder_key), false))
           q.includeOption(QuestionOptions.REMAINDER);
 
-        q.setNumOperands(2); //Number of Operands for Division Question will always be 2
+        q.setNumOperands(Question.DIV_NUM_OPERANDS); //Number of Operands for Division Question will always be 2
         q.setNumDigits(Integer.parseInt(pref.getString(context.getString(R.string.list_pref_div_digits_key), "2")));
         break;
 

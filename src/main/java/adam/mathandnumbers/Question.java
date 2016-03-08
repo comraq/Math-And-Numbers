@@ -9,13 +9,14 @@ import java.util.concurrent.ThreadLocalRandom;
 import adam.mathandnumbers.QuestionBank.QuestionType;
 import adam.mathandnumbers.QuestionBank.QuestionOptions;
 
-import static adam.mathandnumbers.QuestionBank.QuestionType.*;
-
 /**
  * Created by adam on 2016-01-09.
  */
 public class Question {
-  //TODO: Need to update numDigits based on the specified options;
+  public static int DIV_NUM_OPERANDS = 2;
+  public static int DIVIDEND_INDEX = 1;
+  public static int DIVISOR_INDEX = 0;
+
   private int numOperands;
   private int numDigits;
 
@@ -23,6 +24,7 @@ public class Question {
   private Set<QuestionOptions> options;
   private ArrayList<Integer> operands;
   private int answer;
+  private int answerRemainder;
 
   public Question (QuestionType type) {
     this.type = type;
@@ -106,7 +108,6 @@ public class Question {
 
   private void genMultiplicationQuestion() {
     int total = (int) Math.pow(10, numDigits);
-    //TODO: Generate operands as restricted by the specified options;
     for (int i = 0; i < numOperands; ++i) {
       operands.add(0, ThreadLocalRandom.current().nextInt(0, total));
       if (operands.get(0) != 0)
@@ -133,7 +134,7 @@ public class Question {
     if (options.contains(QuestionOptions.REMAINDER))
       return;
 
-    int dividend = operands.get(1), divisor = operands.get(0);
+    int dividend = operands.get(DIVIDEND_INDEX), divisor = operands.get(DIVISOR_INDEX);
     int remainder = dividend % divisor;
     boolean increase = new Random().nextBoolean();
     if (increase && (divisor - remainder + dividend) < (int)Math.pow(10, numDigits))
@@ -162,6 +163,7 @@ public class Question {
   }
 
   private void updateAnswer() {
+    answerRemainder = 0;
     switch(type) {
       case ADDITION:
         answer = 0;
@@ -179,9 +181,14 @@ public class Question {
           answer *= operand;
         break;
       case DIVISION:
+        /*
         answer = operands.get(operands.size() - 1);
         for (int i = 0; i < operands.size() - 1; ++i)
           answer /= operands.get(i);
+        */
+        answer = operands.get(DIVIDEND_INDEX) / operands.get(DIVISOR_INDEX);
+        if (options.contains(QuestionOptions.REMAINDER))
+          answerRemainder = operands.get(DIVIDEND_INDEX) % operands.get(DIVISOR_INDEX);
         break;
       default:
         //Do nothing!
@@ -197,4 +204,8 @@ public class Question {
   public int getNumDigits() { return numDigits; }
 
   public ArrayList<Integer> getOperands() { return operands; }
+
+  public int getAnswerRemainder() {
+    return answerRemainder;
+  }
 }

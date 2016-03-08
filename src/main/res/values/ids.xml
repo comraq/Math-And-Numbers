@@ -6,5 +6,7 @@
   <item name="ques_frag_operand_four" type="id"/>
   <item name="ques_frag_operand_five" type="id"/>
   <item name="ques_frag_answer" type="id"/>
+  <item name="ques_frag_remainder_view" type="id"/>
+  <item name="ques_frag_remainder_label" type="id"/>
   <item name="ques_frag_operator" type="id"/>
 </resources>
