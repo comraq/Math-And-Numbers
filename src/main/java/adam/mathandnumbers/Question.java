@@ -111,7 +111,7 @@ public class Question {
     for (int i = 0; i < numOperands; ++i) {
       operands.add(0, ThreadLocalRandom.current().nextInt(0, total));
       if (operands.get(0) != 0)
-        total /= operands.get(i);
+        total /= operands.get(0);
 
       total = (total < 10)? 10 : total;
     }

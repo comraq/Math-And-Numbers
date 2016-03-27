@@ -6,7 +6,9 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +20,7 @@ import android.widget.TextView;
 /**
  * Created by adam on 2016-01-09.
  */
-public class QuestionFragment extends Fragment {
+public class QuestionFragment extends Fragment implements TextWatcher {
 
   private static String OPERANDS = "questionOperands";
   private static String QUESTION_TYPE = "questionType";
@@ -31,6 +33,28 @@ public class QuestionFragment extends Fragment {
   private Question question;
   private QuestionFragCommunicator comm;
   private RelativeLayout layoutContainer;
+  private EditText answerView;
+
+  private int textBeforeLength;
+
+  @Override
+  public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    textBeforeLength = s.length();
+  }
+
+  @Override
+  public void onTextChanged(CharSequence s, int start, int before, int count) {
+    // Nothing
+  }
+
+  @Override
+  public void afterTextChanged(Editable s) {
+    if (textBeforeLength > s.length() || question.getType() == QuestionBank.QuestionType.DIVISION)
+      return;
+
+    if (answerView != null && answerView.hasFocus())
+      answerView.setSelection(0);
+  }
 
   public interface QuestionFragCommunicator {
     Question getNextQuestion();
@@ -57,7 +81,6 @@ public class QuestionFragment extends Fragment {
   }
 
   public void checkAnswer() {
-    EditText answerView = (EditText) getView().findViewById(R.id.ques_frag_answer);
     EditText remainderView = (EditText) getView().findViewById(R.id.ques_frag_remainder_view);
     String answer = String.valueOf(question.getAnswer());
     boolean remainder = question.checkOptions(QuestionBank.QuestionOptions.REMAINDER);
@@ -182,7 +205,7 @@ public class QuestionFragment extends Fragment {
     else
       params.addRule(RelativeLayout.ABOVE, equationLine.getId());
 
-    EditText answerView = new EditText(getActivity());
+    answerView = new EditText(getActivity());
     answerView.setId(R.id.ques_frag_answer);
     answerView.setHint(R.string.ques_frag_answer_hint);
     answerView.setGravity(Gravity.RIGHT);
@@ -192,6 +215,7 @@ public class QuestionFragment extends Fragment {
     answerView.setBackgroundResource(0); //Removes background resource
     answerView.setLayoutParams(params);
     layoutContainer.addView(answerView);
+    answerView.addTextChangedListener(this);
 
     if (question != null && question.checkOptions(QuestionBank.QuestionOptions.REMAINDER)) {
       params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -221,6 +245,8 @@ public class QuestionFragment extends Fragment {
       remainderView.setBackgroundResource(0); //Removes background resource
       remainderView.setLayoutParams(params);
       layoutContainer.addView(remainderView);
+
+      remainderView.addTextChangedListener(this);
     }
   }
 
